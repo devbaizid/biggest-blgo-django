@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+  <style>
+    .post-body img{
+      width: 100%;
+      height: auto;
+    }
+  </style>
+    <section class="py-5">
+      <div class="container">
+        <div class="row gy-5">
+          <!-- Latest Posts -->
+          <main class="col-lg-8"> 
+            <div class="container">
+              <img class="img-fluid w-100 mb-4" src="{{ post.thumbnail.url }}" alt="...">
+              <ul class="list-inline mb-3">
+                {% for cat in post.categories.all %}
+                <li class="list-inline-item"><a class="text-uppercase" href="!#">{{cat}}</a></li>
+                {% endfor %}
+              </ul>
+              <div>
+                <a href="{% url 'post-update' id=post.id %}">Update</a>
+                <a href="{% url 'post-delete' id=post.id %}">Delete</a>
+              </div>
+              <h1 class="mb-4">{{post.title}}<a href="!#"><i class="fa fa-bookmark-o"></i></a></h1>
+              <ul class="list-inline list-separated text-gray-500 mb-5">
+                <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
+                    <div class="avatar flex-shrink-0"><img class="img-fluid" src="{{ post.author.profile_picture.url }}" alt="..."></div><small>{{ post.author.user.username }}</small></a></li>
+                <li class="list-inline-item small"><i class="far fa-clock"></i> {{ post.timestamp|timesince }} ago </li>
+                <li class="list-inline-item small"><i class="far fa-comment"></i> {{ post.comment_count }} </li>
+                <li class="list-inline-item small"><i class="far fa-eye"></i> {{ post.view_count }} </li>
+
+              </ul>
+              <div class="post-body">
+               {{post.content | safe}}
+              </div>
+              
+              <!-- <ul class="list-inline mb-5">
+                <li class="list-inline-item"><a class="tag" href="!#">#Business</a></li>
+                <li class="list-inline-item"><a class="tag" href="!#">#Tricks</a></li>
+                <li class="list-inline-item"><a class="tag" href="!#">#Financial</a></li>
+                <li class="list-inline-item"><a class="tag" href="!#">#Economy</a></li>
+              </ul> -->
+              <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row mb-5">
+                {% if post.previous_post %}
+                <a class="prev-post text-start d-flex align-items-center" href="{{ post.previous_post.get_absolute_url }}">
+                  <div class="icon prev"><i class="fas fa-angle-left"></i></div>
+                  <div class="text"><strong class="text-primary">Previous Post </strong>
+                    <h6>{{ post.previous_post.title }}</h6>
+                  </div>
+                </a>
+{% endif %}
+{% if post.next_post %}
+
+                <a class="next-post text-end d-flex align-items-center justify-content-end" href="{{ post.next_post.get_absolute_url }}">
+                  <div class="text">
+                    <strong class="text-primary">Next Post </strong>
+                    <h6>{{ post.next_post.title }}</h6>
+                  </div>
+                  <div class="icon next"><i class="fas fa-angle-right">   </i></div></a></div>
+              {% endif %}
+              
+              
+                  <div class="mb-5">
+                <header>
+                  <h3 class="h6 mb-4">Post Comments<span class="fw-light text-gray-600 small ms-2">({{post.comments.count}})</span></h3>
+                </header>
+                {% for comment in post.get_comments %}
+                <div class="d-flex align-items-start">
+                  {% if comment.user.author %}
+                  <img class="img-fluid rounded-circle flex-shrink-0" src="{{comment.user.author.profile_picture.url}}" alt="Jabi Hernandiz" width="50"/>
+{% else %}
+<img class="img-fluid rounded-circle flex-shrink-0" src="{% static 'img/user.svg' %}" alt="Jabi Hernandiz" width="50"/>
+
+{% endif %}
+                  <div class="pb-4 ms-3 border-bottom mb-4"><strong>{{ comment.user.username }}</strong>
+                    <p class="small text-gray-500">{{comment.timestamp | timesince }}</p>
+                    <p class="mb-0 text-sm">{{comment.content}}</p>
+                  </div>
+                </div>
+                {% endfor %}
+        
+
+                <header>
+                  <h3 class="h6 mb-4">Leave a reply</h3>
+                </header>
+                {% if user.is_authenticated %}
+                <div class="d-flex align-items-start"><img class="img-fluid rounded-circle flex-shrink-0" src="{{ user.author.profile_picture.url }}" alt="John Doe" width="50"/>
+                  <div class="pb-4 ms-3 true"><strong>{{user}}</strong>
+                    <form action="." method="post">
+                      <div class="row ">
+    {% csrf_token %}
+                        <div class="col-md-12">
+                          <div class="border-bottom">
+                            {{form.content}}
+                          </div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                          <br>
+                          <button class="btn btn-secondary" type="submit">Submit Comment</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+          
+  
+              </div>
+  
+              {% endif %}
+           
+            </div>
+          </main>
+       {% include 'sidebar.html' with category_count=category_count most_recent=most_recent %}
+
+        </div>
+      </div>
+    </section>
+  
+  
+    {% endblock content%}

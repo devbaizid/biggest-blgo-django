@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  
+    <section>
+      <div class="container">
+        <div class="row gy-5">
+          <!-- Latest Posts -->
+          <main class="col-lg-8"> 
+            <div class="container">
+              <div class="row gy-4 mb-5">
+                {% for post in queryset %}
+                <!-- post -->
+                <div class="col-xl-6"><a class="mb-3" href="{{post.get_absolute_url}}"><img class="img-fluid" src="{{ post.thumbnail.url }}" alt="..."/></a>
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                  <!-- <small class="text-gray-500">20 May | 2016</small> -->
+<div class="category">
+                    {% for cat in post.categories.all %}
+                    <a class="small fw-bold text-uppercase small" href="!#">{{ cat }}</a>
+                  {% endfor %}
+                  </div>
+
+                </div>
+                  <h3 class="h4"><a class="text-dark" href="{{post.get_absolute_url}}">{{ post.title }}</a></h3>
+                  <p class="text-muted text-sm">{{ post.overview|linebreaks|truncatechars:100 }}</p>
+                  <ul class="list-inline list-separated text-gray-500 mb-0">
+                    <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
+                        <div class="avatar flex-shrink-0"><img class="img-fluid" src="{{ post.author.profile_picture.url }}" alt="..."/></div><small>{{ post.author.user.username }}</small></a></li>
+                    <li class="list-inline-item small"><i class="far fa-clock"></i> {{ post.timestamp|timesince }}</li>
+                    <li class="list-inline-item small"><i class="far fa-comment"></i> {{ post.comment_count }}</li>
+                  </ul>
+                </div>
+{% endfor %}
+              </div>
+              <!-- Pagination -->
+              <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-template d-flex justify-content-center">
+                  {% if queryset.has_previous %}                
+                  <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
+                  {% endif %}
+                  <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.number }}" class="page-link active">{{ queryset.number }}</a></li>
+                  {% if queryset.has_next %}
+                  <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.next_page_number }}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+                  {% endif %}
+                </ul>
+              </nav>
+
+            </div>
+          </main>
+       {% include 'sidebar.html' with category_count=category_count most_recent=most_recent %}
+        </div>
+      </div>
+    </section>
+  
+    {% endblock content %}

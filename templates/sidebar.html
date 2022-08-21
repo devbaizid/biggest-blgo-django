@@ -1,0 +1,62 @@
+<aside class="col-lg-4">
+    <!-- Widget [Search Bar Widget]-->
+    <div class="card mb-5">
+      <div class="card-body">
+        <h3 class="h6">Search the blog</h3>
+        <form action="{% url 'search' %}">
+          <div class="input-group border-bottom">
+            <input class="form-control border-0 shadow-0 ps-0" name="q" type="text" placeholder="What are you looking for?">
+            <button class="btn btn-link btn-sm shadow-0 px-0" type="submit"><i class="fas fa-search"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Widget [Latest Posts Widget]        -->
+    <div class="card mb-5">
+      <div class="card-body">
+        <h3 class="h6 mb-3">Latest Posts</h3>
+        {% for post in  most_recent %}
+        <a class="text-reset mb-3" href="{{post.get_absolute_url}}">
+          <div class="d-flex align-items-center">
+            <img class="img-fluid flex-shrink-0" src="{{ post.thumbnail.url }}" alt="..." width="55">
+            <div class="ms-3">
+              <p class="mb-2 fw-bold text-gray-700 lh-1">{{ post.title }}</p>
+              <ul class="list-inline list-separated text-gray-500 d-flex align-items-center">
+                <li class="list-inline-item small"><i class="far fa-eye"></i> {{ post.view_count }} </li>
+                <li class="list-inline-item small"><i class="far fa-comment"></i>  {{ post.comment_count }}</li>
+              </ul>
+            </div>
+          </div></a>
+          {% endfor %}
+      </div>
+    </div>
+    <!-- Widget [Categories Widget]-->
+    <div class="card mb-5">
+      <div class="card-body">
+        <h3 class="h6 mb-3">Categories</h3>
+        {% for cat in category_count %}
+        <div class="p-2 d-flex justify-content-between mb-1 fw-bold text-gray-600 bg-light">
+          <a class="text-reset" href="!#">{{cat.categories__title}}</a>
+          <span>{{cat.categories__title__count}}</span>
+        </div>
+        {% endfor %}
+
+
+      </div>
+
+
+    </div>
+    <!-- Widget [Tags Cloud Widget]-->
+    <!-- <div class="card">
+      <div class="card-body">     
+        <h3 class="h6 mb-3">Tags</h3>
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item"><a class="tag" href="!#">#Business </a></li>
+          <li class="list-inline-item"><a class="tag" href="!#">#Fashion </a></li>
+          <li class="list-inline-item"><a class="tag" href="!#">#Sports </a></li>
+          <li class="list-inline-item"><a class="tag" href="!#">#Technology </a></li>
+          <li class="list-inline-item"><a class="tag" href="!#">#Economy </a></li>
+        </ul>
+      </div>
+    </div> -->
+  </aside>
